@@ -4,15 +4,14 @@
 @section('section', 'Courses')
 
 @section('content')
-    <p class="eyebrow">Administrator dashboard</p>
-    <h1>Courses</h1>
-    <p class="intro">Create and manage courses offered by each programme.</p>
+    <div class="catalog-page-header">
+        <div class="catalog-heading"><p class="eyebrow">Registration records</p><h1>Courses</h1></div>
+        <div class="catalog-page-actions"><a class="button" href="{{ route('admin.courses.create') }}">Add course</a></div>
+    </div>
 
-    <section class="panel" aria-labelledby="courses-heading">
-        <div class="toolbar">
-            <h2 id="courses-heading">All courses</h2>
-            <a class="button" href="{{ route('admin.courses.create') }}">Add course</a>
-        </div>
+    <section class="panel catalog-card" aria-labelledby="courses-heading">
+        <div class="catalog-card-heading"><h2 id="courses-heading">All courses</h2><span class="programme-count">{{ $courses->count() }}</span></div>
+        <div class="catalog-card-body">
 
         <form class="import-form" method="POST" action="{{ route('admin.courses.import') }}" enctype="multipart/form-data">
             @csrf
@@ -30,7 +29,15 @@
         @if ($courses->isEmpty())
             <p class="empty">No courses have been added yet.</p>
         @else
-            <table>
+            @php
+                $tableId = 'courses-table';
+                $recordLabel = 'courses';
+                $records = $courses;
+                $tableFilters = [['key' => 'programme', 'label' => 'Programme', 'path' => 'program.name']];
+            @endphp
+            @include('partials.index-table-controls', compact('tableId', 'recordLabel', 'records', 'tableFilters'))
+            <div class="table-wrap">
+            <table class="data-table">
                 <thead>
                     <tr>
                         <th scope="col">Code</th>
@@ -39,9 +46,9 @@
                         <th scope="col">Actions</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="{{ $tableId }}">
                     @foreach ($courses as $course)
-                        <tr>
+                        <tr @include('partials.index-row-filters', ['record' => $course, 'tableFilters' => $tableFilters])>
                             <td>{{ $course->code }}</td>
                             <td>{{ $course->title }}</td>
                             <td>{{ $course->program?->name ?? 'Unassigned' }}</td>
@@ -60,7 +67,9 @@
                     @endforeach
                 </tbody>
             </table>
-            <div class="pagination">{{ $courses->links() }}</div>
+            </div>
+            @include('partials.jquery-pagination', ['targetSelector' => '#' . $tableId . ' > tr[data-record]', 'label' => 'courses'])
         @endif
+        </div>
     </section>
 @endsection

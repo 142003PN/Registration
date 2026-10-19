@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Students;
+use App\Models\Courses;
+use App\Models\Programs;
 use Illuminate\View\View;
 
 class LoginController extends Controller
@@ -41,7 +44,11 @@ class LoginController extends Controller
     {
         abort_unless(Auth::user()?->is_admin, 403);
 
-        return view('admin.dashboard');
+        return view('admin.dashboard', [
+            'studentCount' => Students::count(),
+            'courseCount' => Courses::count(),
+            'programCount' => Programs::count(),
+        ]);
     }
 
     public function logout(Request $request): RedirectResponse

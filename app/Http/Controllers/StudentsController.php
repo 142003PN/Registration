@@ -16,7 +16,7 @@ class StudentsController extends Controller
             ->with('program')
             ->orderBy('last_name')
             ->orderBy('first_name')
-            ->paginate(10);
+            ->get();
 
         return view('admin.students.index', compact('students'));
     }

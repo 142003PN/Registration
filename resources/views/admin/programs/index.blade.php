@@ -3,20 +3,14 @@
 @section('title', 'Manage programmes')
 
 @section('content')
-    <p class="eyebrow">Administrator dashboard</p>
-    <h1>Programmes</h1>
-    <p class="intro">Create and manage the programmes available in the registration system.</p>
+    <div class="catalog-page-header">
+        <div class="catalog-heading"><p class="eyebrow">Registration records</p><h1>Programmes</h1></div>
+        <div class="catalog-page-actions"><a class="button button-secondary" href="{{ route('admin.programs.create') }}">Add programme</a></div>
+    </div>
 
-    <section class="panel" aria-labelledby="programmes-heading">
-        <div class="toolbar">
-            <div class="table-heading">
-                <h2 id="programmes-heading">All programmes</h2>
-                <span class="programme-count">{{ $programs->total() }}</span>
-            </div>
-            <div class="actions">
-                <a class="button button-secondary" href="{{ route('admin.programs.create') }}">Add programme</a>
-            </div>
-        </div>
+    <section class="panel catalog-card" aria-labelledby="programmes-heading">
+        <div class="catalog-card-heading"><h2 id="programmes-heading">All programmes</h2><span class="programme-count">{{ $programs->count() }}</span></div>
+        <div class="catalog-card-body">
 
         <form class="import-form" method="POST" action="{{ route('admin.programs.import') }}" enctype="multipart/form-data">
             @csrf
@@ -34,17 +28,24 @@
         @if ($programs->isEmpty())
             <p class="empty">No programmes have been added yet.</p>
         @else
+            @php
+                $tableId = 'programmes-table';
+                $recordLabel = 'programmes';
+                $records = $programs;
+                $tableFilters = [];
+            @endphp
+            @include('partials.index-table-controls', compact('tableId', 'recordLabel', 'records', 'tableFilters'))
             <div class="table-wrap">
-                <table class="programmes-table">
+                <table class="programmes-table data-table">
                     <thead>
                         <tr>
                             <th scope="col">Programme</th>
                             <th scope="col" class="actions-heading">Actions</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="{{ $tableId }}">
                         @foreach ($programs as $program)
-                            <tr>
+                            <tr @include('partials.index-row-filters', ['record' => $program, 'tableFilters' => $tableFilters])>
                                 <td class="programme-name">
                                     <span class="programme-marker" aria-hidden="true"></span>
                                     {{ $program->name }}
@@ -65,7 +66,8 @@
                     </tbody>
                 </table>
             </div>
-            <div class="pagination">{{ $programs->links() }}</div>
+            @include('partials.jquery-pagination', ['targetSelector' => '#' . $tableId . ' > tr[data-record]', 'label' => 'programmes'])
         @endif
+        </div>
     </section>
 @endsection

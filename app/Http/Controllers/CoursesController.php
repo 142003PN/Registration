@@ -22,7 +22,7 @@ class CoursesController extends Controller
         $courses = Courses::query()
             ->with('program')
             ->orderBy('code')
-            ->paginate(10);
+            ->get();
 
         return view('admin.courses.index', compact('courses'));
     }

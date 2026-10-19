@@ -19,7 +19,7 @@ class ProgramsController extends Controller
     {
         $programs = Programs::query()
             ->orderBy('name')
-            ->paginate(10);
+            ->get();
 
         return view('admin.programs.index', compact('programs'));
     }
