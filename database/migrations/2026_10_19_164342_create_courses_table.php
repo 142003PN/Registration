@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('courses', function (Blueprint $table) {
             $table->id();
-            $table->string('code', 10);
-            $table->string('title', 50);
+            $table->string('code', 20);
+            $table->string('title', 100);
             $table->foreignId('program_id')->nullable()->constrained('programs')->nullOnDelete();
 
             $table->unique(['code', 'program_id']);

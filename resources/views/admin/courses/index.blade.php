@@ -14,6 +14,19 @@
             <a class="button" href="{{ route('admin.courses.create') }}">Add course</a>
         </div>
 
+        <form class="import-form" method="POST" action="{{ route('admin.courses.import') }}" enctype="multipart/form-data">
+            @csrf
+            <div class="field">
+                <label for="course-file">Import courses from Excel</label>
+                <input id="course-file" name="file" type="file" accept=".xlsx,.xls,.csv" required>
+                <p class="hint">Upload an .xlsx, .xls, or .csv file with Programme Name, Course Code, and Course Title columns, followed by one course per row. Programme names must match an existing programme.</p>
+                @foreach ($errors->get('file') as $error)
+                    <p class="error">{{ $error }}</p>
+                @endforeach
+            </div>
+            <button class="button" type="submit">Import spreadsheet</button>
+        </form>
+
         @if ($courses->isEmpty())
             <p class="empty">No courses have been added yet.</p>
         @else

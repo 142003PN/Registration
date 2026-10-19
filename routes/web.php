@@ -28,6 +28,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
     Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
+        Route::post('programs/import', [ProgramsController::class, 'import'])->name('programs.import');
+        Route::post('courses/import', [CoursesController::class, 'import'])->name('courses.import');
         Route::resource('programs', ProgramsController::class);
         Route::resource('courses', CoursesController::class);
         Route::resource('students', StudentsController::class);

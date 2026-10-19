@@ -77,22 +77,65 @@
         .toolbar, .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
         .toolbar { justify-content: space-between; margin-bottom: 18px; }
         .toolbar h2 { margin: 0; font-size: 18px; }
+        .table-heading { display: flex; align-items: center; gap: 10px; }
+        .programme-count {
+            display: inline-flex;
+            min-width: 28px;
+            height: 26px;
+            align-items: center;
+            justify-content: center;
+            padding: 0 8px;
+            border-radius: 999px;
+            color: var(--primary-strong);
+            background: #eaf6ed;
+            font-size: 12px;
+            font-weight: 750;
+        }
+        .import-form { margin-bottom: 24px; padding: 20px; border: 1px solid var(--line); border-radius: 10px; background: var(--background); }
         table { width: 100%; border-collapse: collapse; text-align: left; }
         th, td { padding: 14px 12px; border-bottom: 1px solid var(--line); }
         th { color: var(--muted); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; }
         td:last-child { width: 1%; white-space: nowrap; }
-        .text-link { color: var(--primary-strong); font-weight: 650; text-decoration: none; }
-        .text-link:hover { text-decoration: underline; }
-        .inline-form { display: inline; }
-        .inline-form button {
-            padding: 0;
+        .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; }
+        .programmes-table { width: 100%; min-width: 520px; border-collapse: collapse; text-align: left; }
+        .programmes-table th, .programmes-table td { padding: 15px 18px; border-bottom: 1px solid var(--line); }
+        .programmes-table th {
+            color: var(--muted);
+            background: #f8faf8;
+            font-size: 11px;
+            font-weight: 750;
+            letter-spacing: .09em;
+            text-transform: uppercase;
+        }
+        .programmes-table tbody tr:last-child td { border-bottom: 0; }
+        .programmes-table tbody tr { transition: background-color .15s ease; }
+        .programmes-table tbody tr:hover { background: #f7fbf8; }
+        .programme-name { font-weight: 650; }
+        .programme-marker { display: inline-block; width: 8px; height: 8px; margin-right: 10px; border-radius: 50%; background: var(--primary); }
+        .programmes-table .actions-heading, .programme-actions { width: 1%; white-space: nowrap; }
+        .text-link, .inline-form button {
+            display: inline-flex;
+            min-height: 32px;
+            align-items: center;
+            justify-content: center;
+            padding: 5px 9px;
             border: 0;
-            color: var(--danger);
-            background: none;
+            border-radius: 6px;
+            color: var(--primary-strong);
+            background: transparent;
             cursor: pointer;
             font: inherit;
+            font-size: 13px;
             font-weight: 650;
+            text-decoration: none;
         }
+        .text-link:hover { background: #eaf6ed; }
+        .text-link:focus-visible, .inline-form button:focus-visible { outline: 3px solid rgb(10 142 46 / 25%); outline-offset: 2px; }
+        .inline-form { display: inline; }
+        .inline-form button {
+            color: var(--danger);
+        }
+        .inline-form button:hover { background: #fdf0ef; }
         .empty { padding: 24px 12px; color: var(--muted); text-align: center; }
         label { display: block; margin-bottom: 8px; font-size: 14px; font-weight: 650; }
         input[type="text"] {
@@ -105,6 +148,7 @@
             background: #fff;
             font: inherit;
         }
+        input[type="file"] { width: 100%; color: var(--ink); font: inherit; }
         select {
             width: 100%;
             min-height: 46px;
@@ -127,8 +171,7 @@
             .topbar { min-height: 64px; padding: 0 18px; }
             main { width: min(100% - 32px, 1120px); margin: 32px auto; }
             .panel { padding: 19px; }
-            th, td { padding: 12px 8px; }
-            td:last-child { white-space: normal; }
+            .programmes-table th, .programmes-table td { padding: 13px 12px; }
         }
     </style>
 </head>

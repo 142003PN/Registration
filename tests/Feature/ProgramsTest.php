@@ -5,6 +5,9 @@ namespace Tests\Feature;
 use App\Models\Programs;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Tests\TestCase;
 
 class ProgramsTest extends TestCase
@@ -65,5 +68,66 @@ class ProgramsTest extends TestCase
             ->post(route('admin.programs.store'), ['name' => str_repeat('a', 51)])
             ->assertRedirect(route('admin.programs.create'))
             ->assertSessionHasErrors('name');
+    }
+
+    public function test_admin_can_import_programmes_from_an_excel_file_and_duplicates_are_skipped(): void
+    {
+        $this->actingAs(User::factory()->create(['is_admin' => true]));
+        Programs::create(['name' => 'Existing Programme']);
+
+        $this->post(route('admin.programs.import'), [
+            'file' => $this->excelUpload([
+                ['Programme Name'],
+                ['Computer Science'],
+                ['Existing Programme'],
+                ['Computer Science'],
+                ['computer science'],
+                ['Information Systems'],
+            ]),
+        ])
+            ->assertRedirect(route('admin.programs.index'))
+            ->assertSessionHas('success', 'Imported 2 programme(s); skipped 3 duplicate(s).');
+
+        $this->assertDatabaseHas('programs', ['name' => 'Computer Science']);
+        $this->assertDatabaseHas('programs', ['name' => 'Information Systems']);
+        $this->assertDatabaseCount('programs', 3);
+    }
+
+    public function test_import_rejects_overlong_names_without_importing_any_rows(): void
+    {
+        $this->actingAs(User::factory()->create(['is_admin' => true]));
+
+        $this->from(route('admin.programs.index'))
+            ->post(route('admin.programs.import'), [
+                'file' => $this->excelUpload([
+                    ['Programme Name'],
+                    ['Valid Programme'],
+                    [str_repeat('a', 51)],
+                ]),
+            ])
+            ->assertRedirect(route('admin.programs.index'))
+            ->assertSessionHasErrors('file');
+
+        $this->assertDatabaseMissing('programs', ['name' => 'Valid Programme']);
+        $this->assertDatabaseCount('programs', 0);
+    }
+
+    private function excelUpload(array $rows): UploadedFile
+    {
+        $spreadsheet = new Spreadsheet();
+        $spreadsheet->getActiveSheet()->fromArray($rows, null, 'A1');
+
+        $path = tempnam(sys_get_temp_dir(), 'programmes');
+        try {
+            (new Xlsx($spreadsheet))->save($path);
+
+            return UploadedFile::fake()->createWithContent(
+                'programmes.xlsx',
+                file_get_contents($path)
+            );
+        } finally {
+            $spreadsheet->disconnectWorksheets();
+            unlink($path);
+        }
     }
 }
