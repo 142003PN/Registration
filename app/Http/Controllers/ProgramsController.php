@@ -67,6 +67,12 @@ class ProgramsController extends Controller
 
     public function destroy(Programs $program): RedirectResponse
     {
+        if ($program->students()->exists()) {
+            return redirect()
+                ->route('admin.programs.show', $program)
+                ->with('error', 'This programme cannot be deleted while students are assigned to it.');
+        }
+
         $program->delete();
 
         return redirect()

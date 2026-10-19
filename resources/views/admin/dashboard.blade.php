@@ -130,6 +130,12 @@
             <p>Create, update, and remove courses offered by each programme.</p>
             <a class="panel-link" href="{{ route('admin.courses.index') }}">Manage courses</a>
         </section>
+
+        <section class="panel" aria-labelledby="students-heading" style="margin-top: 20px">
+            <h2 id="students-heading">Students</h2>
+            <p>Create, update, and remove students, assigning each student to one programme.</p>
+            <a class="panel-link" href="{{ route('admin.students.index') }}">Manage students</a>
+        </section>
     </main>
 </body>
 </html>
