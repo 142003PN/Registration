@@ -18,7 +18,7 @@
       padding: .43in .48in .32in; overflow: hidden; page-break-after: always;
     }
     .page:last-child { page-break-after: auto; }
-    .masthead { text-align: center; height: 1.72in; position: relative; padding-top: 1.25in; }
+    .masthead { text-align: center; height: 2in; position: relative; padding-top: 1.25in; }
     .logo-slot { position: absolute; top: .03in; left: 50%; transform: translateX(-50%); width: 1.05in; height: .98in; }
     .logo-slot img { width: 100%; height: 100%; object-fit: contain; }
     .qr-slot { position: absolute; top: .12in; right: .02in; width: 1.62in; text-align: center; }
@@ -26,7 +26,7 @@
     .qr-slot small { font-size: 7pt; white-space: nowrap; }
     .university { font-size: 22pt; line-height: 1.1; color: #333; }
     .slip-title { font-size: 13pt; line-height: 1.2; color: #333; }
-    .printed { font-size: 9pt; line-height: 1.25; }
+    .printed { display: block; margin-top: .02in; text-align: center; font-size: 9pt; line-height: 1.25; }
     .programme { text-align: center; font-size: 22pt; font-weight: normal; color: #333; margin: .02in 0 .08in; white-space: nowrap; }
     .rule { border: 0; border-top: 1px solid #999; margin: .08in 0 .19in; }
     h2 { font-size: 18pt; margin: 0 0 .18in; line-height: 1.12; }
