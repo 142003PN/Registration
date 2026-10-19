@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProgramsController;
+use App\Http\Controllers\CoursesController;
 use App\Http\Controllers\LoginController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -23,5 +24,6 @@ Route::middleware('auth')->group(function () {
 
     Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
         Route::resource('programs', ProgramsController::class);
+        Route::resource('courses', CoursesController::class);
     });
 });

@@ -124,6 +124,12 @@
             <p>Create, update, and remove the programmes available for registration.</p>
             <a class="panel-link" href="{{ route('admin.programs.index') }}">Manage programmes</a>
         </section>
+
+        <section class="panel" aria-labelledby="courses-heading" style="margin-top: 20px">
+            <h2 id="courses-heading">Courses</h2>
+            <p>Create, update, and remove courses offered by each programme.</p>
+            <a class="panel-link" href="{{ route('admin.courses.index') }}">Manage courses</a>
+        </section>
     </main>
 </body>
 </html>

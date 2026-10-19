@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>@yield('title') | Programmes | {{ config('app.name', 'Registration Portal') }}</title>
+    <title>@yield('title') | @yield('section', 'Programmes') | {{ config('app.name', 'Registration Portal') }}</title>
     <style>
         :root {
             --primary: #0a8e2e;
@@ -94,16 +94,18 @@
             font-weight: 650;
         }
         .empty { padding: 24px 12px; color: var(--muted); text-align: center; }
-        .flash {
-            margin-bottom: 20px;
-            padding: 13px 16px;
-            border: 1px solid #b7e2c0;
-            border-radius: 9px;
-            color: #14532d;
-            background: #effaf1;
-        }
         label { display: block; margin-bottom: 8px; font-size: 14px; font-weight: 650; }
         input[type="text"] {
+            width: 100%;
+            min-height: 46px;
+            padding: 11px 13px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            color: var(--ink);
+            background: #fff;
+            font: inherit;
+        }
+        select {
             width: 100%;
             min-height: 46px;
             padding: 11px 13px;
@@ -139,10 +141,18 @@
         </form>
     </header>
     <main>
-        @if (session('success'))
-            <div class="flash" role="status">{{ session('success') }}</div>
-        @endif
         @yield('content')
     </main>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @if (session('success') || session('error'))
+        <script>
+            Swal.fire({
+                icon: @json(session('success') ? 'success' : 'error'),
+                title: @json(session('success') ? 'Success' : 'Error'),
+                text: @json(session('success') ?? session('error')),
+                confirmButtonColor: '#0a8e2e'
+            });
+        </script>
+    @endif
 </body>
 </html>
