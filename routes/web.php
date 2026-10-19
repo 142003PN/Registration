@@ -4,13 +4,17 @@ use App\Http\Controllers\ProgramsController;
 use App\Http\Controllers\CoursesController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\StudentsController;
+use App\Http\Controllers\CourseRegistrationController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', fn () => Auth::check()
-    ? redirect()->route('dashboard')
-    : view('auth.login')
-)->name('home');
+Route::get('/', [CourseRegistrationController::class, 'create'])->name('home');
+Route::get('/register', [CourseRegistrationController::class, 'create'])->name('registration.create');
+Route::get('/programmes/{program}/courses', [CourseRegistrationController::class, 'courses'])->name('registration.courses');
+Route::post('/register', [CourseRegistrationController::class, 'store'])->middleware('throttle:10,1')->name('registration.store');
+Route::get('/registration-slip/{student}', [CourseRegistrationController::class, 'slip'])->name('registration.slip');
+Route::get('/find-registration', [CourseRegistrationController::class, 'lookup'])->name('registration.lookup');
+Route::post('/find-registration', [CourseRegistrationController::class, 'find'])->middleware('throttle:5,1')->name('registration.find');
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
