@@ -61,7 +61,7 @@
         <div class="qr-slot"><!-- Add your QR image here --><img src="data:image/svg+xml;base64,{{ base64_encode($qr_code) }}" alt="Confirmation QR code"><small>22010146-2026-10-19-29722</small></div>
         <div class="university">Mukuba University</div>
         <div class="slip-title">REGISTRATION CONFIRMATION SLIP</div>
-        <div class="printed">PRINTED BY 22010146 ON 2026-10-19</div>
+        <div class="printed">PRINTED BY {{ $student->id }} ON {{ now()->format('Y-m-d H:i:s') }}</div>
       </header>
 
       <h1 class="programme">{{ $student->program->name }}</h1>
