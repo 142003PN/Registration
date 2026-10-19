@@ -36,6 +36,7 @@ class CourseRegistrationController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $data = $request->validate([
+            'student_id' => ['required', 'integer', 'min:1', 'unique:students,id'],
             'first_name' => ['required', 'string', 'max:15'],
             'middle_name' => ['nullable', 'string', 'max:15'],
             'last_name' => ['required', 'string', 'max:15'],
@@ -49,6 +50,7 @@ class CourseRegistrationController extends Controller
 
         $studentId = DB::transaction(function () use ($data) {
             $student = Students::create([
+                'id' => $data['student_id'],
                 'first_name' => $data['first_name'],
                 'middle_name' => $data['middle_name'] ?? null,
                 'last_name' => $data['last_name'],
