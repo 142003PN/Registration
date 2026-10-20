@@ -234,7 +234,6 @@
 <body>
     <header class="topbar">
         <a class="brand" href="{{ route('dashboard') }}">
-            <img class="brand-logo" src="{{ asset('images/logo.png') }}" alt="Mukuba University logo">
             <span>{{ config('app.name', 'Registration Portal') }} · Admin</span>
         </a>
         <form method="POST" action="{{ route('logout') }}">
