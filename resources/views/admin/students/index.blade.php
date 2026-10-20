@@ -27,27 +27,17 @@
             <table class="data-table">
                 <thead>
                     <tr>
-                        <th scope="col">Student</th>
+                        <th scope="col">Student Id</th>
+                        <th scope="col">Student Name</th>
                         <th scope="col">Programme</th>
-                        <th scope="col">Actions</th>
                     </tr>
                 </thead>
                 <tbody id="{{ $tableId }}">
                     @foreach ($students as $student)
-                        <tr @include('partials.index-row-filters', ['record' => $student, 'tableFilters' => $tableFilters])>
+                        <tr style="cursor: pointer" onclick="window.location.href='{{ route('admin.students.show', $student) }}'" @include('partials.index-row-filters', ['record' => $student, 'tableFilters' => $tableFilters])>
+                            <td>{{ $student->id}}</td>
                             <td>{{ $student->first_name }} @if ($student->middle_name){{ $student->middle_name }} @endif{{ $student->last_name }}</td>
                             <td>{{ $student->program->name }}</td>
-                            <td>
-                                <div class="actions">
-                                    <a class="text-link" href="{{ route('admin.students.show', $student) }}">View</a>
-                                    <a class="text-link" href="{{ route('admin.students.edit', $student) }}">Edit</a>
-                                    <form class="inline-form" method="POST" action="{{ route('admin.students.destroy', $student) }}" onsubmit="return confirm('Delete this student?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit">Delete</button>
-                                    </form>
-                                </div>
-                            </td>
                         </tr>
                     @endforeach
                 </tbody>

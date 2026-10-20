@@ -10,6 +10,10 @@
 
     <section class="panel">
         <dl class="detail">
+            <dt>Student Id</dt>
+            <dd>{{ $student->id }}</dd>
+        </dl>
+        <dl class="detail">
             <dt>First name</dt>
             <dd>{{ $student->first_name }}</dd>
         </dl>
