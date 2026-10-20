@@ -46,6 +46,8 @@ class CourseRegistrationController extends Controller
                 'required', 'integer',
                 Rule::exists('courses', 'id')->where('program_id', $request->input('program_id')),
             ],
+        ], [
+            'student_id.unique' => 'Student already registered.',
         ]);
 
         $studentId = DB::transaction(function () use ($data) {
