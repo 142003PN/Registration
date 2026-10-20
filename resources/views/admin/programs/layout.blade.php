@@ -35,7 +35,8 @@
             color: #fff;
             background: var(--primary);
         }
-        .brand { color: #fff; font-size: 17px; font-weight: 750; text-decoration: none; }
+        .brand { display: inline-flex; align-items: center; gap: 10px; color: #fff; font-size: 17px; font-weight: 750; text-decoration: none; }
+        .brand-logo { display: block; width: 48px; height: 48px; object-fit: contain; }
         .topbar form { margin: 0; }
         .sign-out, .button {
             display: inline-flex;
@@ -232,7 +233,10 @@
 </head>
 <body>
     <header class="topbar">
-        <a class="brand" href="{{ route('dashboard') }}">{{ config('app.name', 'Registration Portal') }} · Admin</a>
+        <a class="brand" href="{{ route('dashboard') }}">
+            <img class="brand-logo" src="{{ asset('images/Logo.png') }}" alt="Mukuba University logo">
+            <span>{{ config('app.name', 'Registration Portal') }} · Admin</span>
+        </a>
         <form method="POST" action="{{ route('logout') }}">
             @csrf
             <button class="sign-out" type="submit">Sign out</button>
