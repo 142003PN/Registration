@@ -101,10 +101,13 @@ class CourseRegistrationController extends Controller
         $courses = $student->registrations->pluck('course')->filter()->sortBy('code')->values();
         $printedAt = now();
         $qrPayload = implode('-', [$student->id, $printedAt->format('Y-m-d'), $student->created_at?->format('His') ?? 'REG']);
+        $studentNumber = str_pad((string) $student->getKey(), 8, '0', STR_PAD_LEFT);
         return response()->view('registration.slip3', [
             'student' => $student,
             'courses' => $courses,
             'qr_code' => $this->qrCodeSvg($qrPayload),
+            'student_number' => $studentNumber,
+            'barcode_svg' => $this->barcodeSvg($studentNumber),
         ]);
     }
 
@@ -125,12 +128,14 @@ class CourseRegistrationController extends Controller
 
     private function barcodeSvg(string $value): string
     {
-        return (new BarcodeGeneratorSVG())->getBarcode(
+        $svg = (new BarcodeGeneratorSVG())->getBarcode(
             $value,
             BarcodeGenerator::TYPE_CODE_128,
             1.25,
             40,
             '#111111',
         );
+
+        return substr($svg, strpos($svg, '<svg'));
     }
 }

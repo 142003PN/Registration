@@ -27,7 +27,7 @@
     .university { font-size: 22pt; line-height: 1.1; color: #333; }
     .slip-title { font-size: 13pt; line-height: 1.2; color: #333; }
     .printed { display: block; margin-top: .02in; text-align: center; font-size: 9pt; line-height: 1.25; }
-    .programme { text-align: center; font-size: 22pt; font-weight: normal; color: #333; margin: .02in 0 .08in; white-space: nowrap; }
+    .programme { text-align: center; font-size: 22pt; font-weight: normal; color: #333; margin: .02in 0 .08in; white-space: normal; overflow-wrap: break-word; }
     .rule { border: 0; border-top: 1px solid #999; margin: .08in 0 .19in; }
     h2 { font-size: 18pt; margin: 0 0 .18in; line-height: 1.12; }
     .registered-note { font-size: 12pt; font-weight: bold; margin: 0 0 .015in; }
@@ -42,9 +42,15 @@
     .current-balance { margin: .42in .45in 0 .45in; padding-top: .04in; display: flex; justify-content: space-between; font-size: 11pt; font-weight: bold; }
     .page-footer { position: absolute; bottom: .65in; left: .48in; right: .48in; text-align: center; font-size: 10pt; }
     .page-footer p { margin: .06in 0; }
+    .barcode-slot { display: flex; flex-direction: column; align-items: center; margin: 0 auto .08in; page-break-inside: avoid; break-inside: avoid; }
+    .barcode-slot svg { display: block; width: auto; max-width: 2.8in; max-height: .48in; }
+    .barcode-slot small { margin-top: .025in; font-family: Arial, sans-serif; font-size: 7pt; line-height: 1; letter-spacing: .04em; }
     .student-number { position: absolute; top: .42in; right: .03in; font-size: 10pt; }
     @media screen {
       .page { margin: 18px auto; box-shadow: 0 2px 12px #bbb; }
+    }
+    @media screen and (max-width: 8.5in) {
+      .document, .page { width: 100%; }
     }
     @media print {
       html, body { background: #fff; }
@@ -75,9 +81,12 @@
       </ul>
       <hr class="rule after-courses">
       <footer class="page-footer">
-        <!--Barcode Here-->
         <p>PRINTED BY {{ $student->id }} ON {{ now()->format('Y-m-d H:i:s') }}</p>
         <p>PLEASE KEEP THIS DOCUMENT FOR FUTURE REFERENCE</p>
+        <div class="barcode-slot" aria-label="Barcode for student number {{ $student_number }}">
+          {!! $barcode_svg !!}
+          <small>{{ $student_number }}</small>
+        </div>
       </footer>
     </section>
   </main>
