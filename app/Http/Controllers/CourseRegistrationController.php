@@ -36,7 +36,7 @@ class CourseRegistrationController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $data = $request->validate([
-            'student_id' => ['required', 'integer', 'min:1', 'unique:students,id'],
+            'student_id' => ['required', 'regex:/^[0-9]{8}$/', 'unique:students,id'],
             'first_name' => ['required', 'string', 'max:15'],
             'middle_name' => ['nullable', 'string', 'max:15'],
             'last_name' => ['required', 'string', 'max:15'],
@@ -47,6 +47,7 @@ class CourseRegistrationController extends Controller
                 Rule::exists('courses', 'id')->where('program_id', $request->input('program_id')),
             ],
         ], [
+            'student_id.regex' => 'Student ID must contain exactly 8 numbers.',
             'student_id.unique' => 'Student already registered.',
         ]);
 
@@ -80,8 +81,9 @@ class CourseRegistrationController extends Controller
     public function find(Request $request): RedirectResponse
     {
         $data = $request->validate([
-            'student_id' => ['required', 'integer', 'exists:students,id'],
+            'student_id' => ['required', 'regex:/^[0-9]{8}$/', 'exists:students,id'],
         ], [
+            'student_id.regex' => 'Student ID must contain exactly 8 numbers.',
             'student_id.exists' => 'No registration was found for that student ID.',
         ]);
 

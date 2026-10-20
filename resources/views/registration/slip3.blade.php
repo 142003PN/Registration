@@ -67,7 +67,7 @@
       <h1 class="programme">{{ $student->program->name }}</h1>
       <hr class="rule">
       <h2>Registered Courses - FT-2026- {{ $student->program->name }} -Y1 -S1</h2>
-      <p class="registered-note">This student has registered for the following courses for the term: <u>FullTime 2026/2027({{ now()->format('d, F') }})</u></p>
+      <p class="registered-note">This student has registered for the following courses for the Semester: <u>FullTime 2026/2027({{ now()->format('d, F') }})</u></p>
       <ul class="courses">
         @foreach($courses as $course)
           <li><b>{{ $course->code }}</b> - <i>{{ $course->title }}</i></li>
