@@ -32,7 +32,7 @@ class ProgramsController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'name' => ['required', 'string', 'max:50', 'unique:programs,name'],
+            'name' => ['required', 'string', 'max:200', 'unique:programs,name'],
         ]);
 
         $program = Programs::create($validated);
