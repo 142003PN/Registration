@@ -92,8 +92,6 @@
 <body>
   <nav class="slip-actions" aria-label="Slip actions">
     <button class="slip-action" type="button" onclick="window.print()">Print slip</button>
-    <a class="slip-action" href="{{ route('registration.slip.pdf', $student) }}">Download PDF</a>
-  </nav>
   <main class="document">
     <section class="page page-one">
       <header class="masthead">

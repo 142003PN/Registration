@@ -52,6 +52,16 @@ class CourseRegistrationController extends Controller
             'student_id.unique' => 'Student already registered.',
         ]);
 
+        $selectedCodes = Courses::query()
+            ->whereIn('id', array_unique($data['course_ids']))
+            ->pluck('code');
+
+        if ($selectedCodes->contains('MAT161') && $selectedCodes->contains('MAT111')) {
+            return back()
+                ->withInput()
+                ->withErrors(['course_ids' => 'If you are doing Agribusiness remove MAT111 and If you are not doing agribusiness remove MAT161']);
+        }
+
         $studentId = DB::transaction(function () use ($data) {
             $student = Students::create([
                 'id' => $data['student_id'],

@@ -11,7 +11,7 @@
 <header class="top"><div class="brand"><img src="{{ asset('images/logo.png') }}" alt=""><span>MUKUBA UNIVERSITY</span></div><a class="top-link" href="{{ route('registration.lookup') }}">I have already registered</a></header>
 <main class="wrap"><section class="card">
     <h1>Course registration</h1><p class="muted">Enter your details and select the courses for your programme.</p>
-    @if ($errors->any())<div class="notice" role="alert">Please correct the highlighted fields and try again.</div>@endif
+    @if ($errors->any())<div class="notice" role="alert">{{ $errors->first('course_ids') ?: 'Please correct the highlighted fields and try again.' }}</div>@endif
     <form id="registration-form" method="post" action="{{ route('registration.store') }}">
         @csrf
         <div class="grid">
