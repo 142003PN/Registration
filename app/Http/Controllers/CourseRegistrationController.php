@@ -56,10 +56,10 @@ class CourseRegistrationController extends Controller
             ->whereIn('id', array_unique($data['course_ids']))
             ->pluck('code');
 
-        if ($selectedCodes->contains('MAT161') && $selectedCodes->contains('MAT111')) {
+        if ($selectedCodes->contains('MAT161') && $selectedCodes->contains('MAT151')) {
             return back()
                 ->withInput()
-                ->withErrors(['course_ids' => 'If you are doing Agribusiness remove MAT111 and If you are not doing agribusiness remove MAT161']);
+                ->withErrors(['course_ids' => 'If you are doing Agribusiness remove MAT151 and If you are not doing agribusiness remove MAT161']);
         }
 
         $studentId = DB::transaction(function () use ($data) {
