@@ -10,6 +10,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 use Endroid\QrCode\ErrorCorrectionLevel;
@@ -92,6 +93,19 @@ class CourseRegistrationController extends Controller
 
     public function slip(Students $student)
     {
+        return response()->view('registration.slip3', $this->slipData($student));
+    }
+
+    public function downloadSlip(Students $student)
+    {
+        $pdf = Pdf::loadView('registration.slip3-pdf', $this->slipData($student))
+            ->setPaper('letter');
+
+        return $pdf->download('registration-slip-' . $student->id . '.pdf');
+    }
+
+    private function slipData(Students $student): array
+    {
         $student->load(['program', 'registrations.course']);
 
         if ($student->registrations->isEmpty()) {
@@ -102,13 +116,13 @@ class CourseRegistrationController extends Controller
         $printedAt = now();
         $qrPayload = implode('-', [$student->id, $printedAt->format('Y-m-d'), $student->created_at?->format('His') ?? 'REG']);
         $studentNumber = str_pad((string) $student->getKey(), 8, '0', STR_PAD_LEFT);
-        return response()->view('registration.slip3', [
+        return [
             'student' => $student,
             'courses' => $courses,
             'qr_code' => $this->qrCodeSvg($qrPayload),
             'student_number' => $studentNumber,
             'barcode_svg' => $this->barcodeSvg($studentNumber),
-        ]);
+        ];
     }
 
     private function qrCodeSvg(string $value): string

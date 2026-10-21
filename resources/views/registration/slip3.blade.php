@@ -46,20 +46,54 @@
     .barcode-slot svg { display: block; width: auto; max-width: 2.8in; max-height: .48in; }
     .barcode-slot small { margin-top: .025in; font-family: Arial, sans-serif; font-size: 7pt; line-height: 1; letter-spacing: .04em; }
     .student-number { position: absolute; top: .42in; right: .03in; font-size: 10pt; }
+    .slip-actions { display: flex; justify-content: center; gap: 10px; padding: 16px; }
+    .slip-action { border: 0; border-radius: 6px; padding: 11px 18px; background: #176044; color: #fff; font: 600 14px Arial, sans-serif; text-decoration: none; cursor: pointer; }
+    .slip-action:hover { background: #104c35; }
     @media screen {
       .page { margin: 18px auto; box-shadow: 0 2px 12px #bbb; }
     }
     @media screen and (max-width: 8.5in) {
       .document, .page { width: 100%; }
     }
+    @media screen and (max-width: 600px) {
+      html, body { min-width: 320px; }
+      .document { width: 100%; padding: 0 8px; }
+      .page { height: auto; min-height: 0; margin: 10px auto; padding: 18px 14px 24px; overflow: visible; }
+      .masthead { height: auto; min-height: 176px; padding-top: 83px; }
+      .logo-slot { top: 0; left: 0; transform: none; width: 62px; height: 58px; }
+      .qr-slot { top: 0; right: 0; width: 76px; }
+      .qr-slot img { width: 68px; height: 68px; }
+      .qr-slot small { font-size: 6px; }
+      .university { font-size: 19px; }
+      .slip-title { font-size: 11px; }
+      .printed { font-size: 9px; }
+      .programme { font-size: 20px; }
+      h2 { font-size: 17px; }
+      .registered-note { font-size: 14px; line-height: 1.35; }
+      .courses { padding-left: 20px; font-size: 14px; line-height: 1.4; }
+      .page-footer { position: static; margin-top: 30px; font-size: 12px; }
+      .barcode-slot svg { max-width: 100%; }
+      .student-number { top: auto; right: auto; position: static; text-align: right; }
+      .slip-actions { position: sticky; bottom: 0; z-index: 2; background: #eee; padding: 10px 4px; }
+      .slip-action { flex: 1; text-align: center; padding: 12px 8px; }
+    }
     @media print {
       html, body { background: #fff; }
       .document { margin: 0; }
       .page { margin: 0; box-shadow: none; }
+      .slip-actions { display: none; }
+    }
+    @media screen and (min-width: 601px) {
+      .page { height: auto; min-height: 11in; }
+      .page-footer { position: static; margin-top: 2in; }
     }
   </style>
 </head>
 <body>
+  <nav class="slip-actions" aria-label="Slip actions">
+    <button class="slip-action" type="button" onclick="window.print()">Print slip</button>
+    <a class="slip-action" href="{{ route('registration.slip.pdf', $student) }}">Download PDF</a>
+  </nav>
   <main class="document">
     <section class="page page-one">
       <header class="masthead">
@@ -90,8 +124,5 @@
       </footer>
     </section>
   </main>
-  <script>
-    window.addEventListener('load', () => window.print());
-  </script>
 </body>
 </html>

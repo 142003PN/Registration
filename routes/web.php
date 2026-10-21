@@ -13,6 +13,7 @@ Route::get('/register', [CourseRegistrationController::class, 'create'])->name('
 Route::get('/programmes/{program}/courses', [CourseRegistrationController::class, 'courses'])->name('registration.courses');
 Route::post('/register', [CourseRegistrationController::class, 'store'])->middleware('throttle:10,1')->name('registration.store');
 Route::get('/registration-slip/{student}', [CourseRegistrationController::class, 'slip'])->name('registration.slip');
+Route::get('/registration-slip/{student}/download', [CourseRegistrationController::class, 'downloadSlip'])->name('registration.slip.pdf');
 Route::get('/find-registration', [CourseRegistrationController::class, 'lookup'])->name('registration.lookup');
 Route::post('/find-registration', [CourseRegistrationController::class, 'find'])->middleware('throttle:5,1')->name('registration.find');
 
