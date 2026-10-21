@@ -230,7 +230,7 @@ class CoursesController extends Controller
                     ->where(fn ($query) => $query->where('program_id', $request->input('program_id')))
                     ->ignore($course),
             ],
-            'title' => ['required', 'string', 'max:50'],
+            'title' => ['required', 'string', 'max:100'],
             'program_id' => ['required', 'integer', 'exists:programs,id'],
         ];
     }
