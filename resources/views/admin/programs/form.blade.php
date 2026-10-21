@@ -6,7 +6,7 @@
 
     <div class="field">
         <label for="name">Programme name</label>
-        <input id="name" type="text" name="name" value="{{ old('name', $program?->name) }}" maxlength="50" required autofocus>
+        <input id="name" type="text" name="name" value="{{ old('name', $program?->name) }}" maxlength="200" required autofocus>
         <p class="hint">Use a unique name of up to 50 characters.</p>
         @error('name')
             <p class="error" role="alert">{{ $message }}</p>
