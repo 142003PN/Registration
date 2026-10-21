@@ -15,7 +15,7 @@
 
     <div class="field">
         <label for="title">Course title</label>
-        <input id="title" type="text" name="title" value="{{ old('title', $course?->title) }}" maxlength="50" required>
+        <input id="title" type="text" name="title" value="{{ old('title', $course?->title) }}" maxlength="100" required>
         @error('title')
             <p class="error" role="alert">{{ $message }}</p>
         @enderror
