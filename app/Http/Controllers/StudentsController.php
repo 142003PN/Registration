@@ -4,9 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Programs;
 use App\Models\Students;
-use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
+use PhpOffice\PhpSpreadsheet\Cell\DataType;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class StudentsController extends Controller
 {
@@ -19,6 +23,59 @@ class StudentsController extends Controller
             ->get();
 
         return view('admin.students.index', compact('students'));
+    }
+
+    public function export(): StreamedResponse
+    {
+        $spreadsheet = new Spreadsheet;
+        $worksheet = $spreadsheet->getActiveSheet();
+        $worksheet->setTitle('Registered Students');
+        $worksheet->fromArray(
+            ['Student ID', 'First Name', 'Middle Name', 'Last Name', 'Programme'],
+            null,
+            'A1'
+        );
+        $worksheet->getStyle('A1:E1')->getFont()->setBold(true);
+        $worksheet->freezePane('A2');
+        $worksheet->setAutoFilter('A1:E1');
+
+        $row = 2;
+        Students::query()
+            ->with('program')
+            ->orderBy('last_name')
+            ->orderBy('first_name')
+            ->chunk(500, function ($students) use ($worksheet, &$row): void {
+                foreach ($students as $student) {
+                    $values = [
+                        $student->id,
+                        $student->first_name,
+                        $student->middle_name ?? '',
+                        $student->last_name,
+                        $student->program->name,
+                    ];
+
+                    foreach ($values as $column => $value) {
+                        $worksheet->setCellValueExplicit(
+                            $worksheet->getCell([$column + 1, $row])->getCoordinate(),
+                            (string) $value,
+                            DataType::TYPE_STRING
+                        );
+                    }
+
+                    $row++;
+                }
+            });
+
+        foreach (range('A', 'E') as $column) {
+            $worksheet->getColumnDimension($column)->setAutoSize(true);
+        }
+
+        return response()->streamDownload(function () use ($spreadsheet): void {
+            (new Xlsx($spreadsheet))->save('php://output');
+            $spreadsheet->disconnectWorksheets();
+        }, 'registered-students-'.now()->format('Y-m-d').'.xlsx', [
+            'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        ]);
     }
 
     public function create(): View

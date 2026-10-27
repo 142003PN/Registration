@@ -1,11 +1,10 @@
 <?php
 
-use App\Http\Controllers\ProgramsController;
+use App\Http\Controllers\CourseRegistrationController;
 use App\Http\Controllers\CoursesController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\ProgramsController;
 use App\Http\Controllers\StudentsController;
-use App\Http\Controllers\CourseRegistrationController;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [CourseRegistrationController::class, 'create'])->name('home');
@@ -31,6 +30,7 @@ Route::middleware('auth')->group(function () {
     Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
         Route::post('programs/import', [ProgramsController::class, 'import'])->name('programs.import');
         Route::post('courses/import', [CoursesController::class, 'import'])->name('courses.import');
+        Route::get('students/export', [StudentsController::class, 'export'])->name('students.export');
         Route::resource('programs', ProgramsController::class);
         Route::resource('courses', CoursesController::class);
         Route::resource('students', StudentsController::class);

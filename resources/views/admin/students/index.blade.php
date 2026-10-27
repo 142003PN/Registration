@@ -6,7 +6,10 @@
 @section('content')
     <div class="catalog-page-header">
         <div class="catalog-heading"><p class="eyebrow">Registration records</p><h1>Students</h1></div>
-        <div class="catalog-page-actions"><a class="button" href="{{ route('admin.students.create') }}">Add student</a></div>
+        <div class="catalog-page-actions">
+            <a class="button button-secondary" href="{{ route('admin.students.export') }}">Export Excel</a>
+            <a class="button" href="{{ route('admin.students.create') }}">Add student</a>
+        </div>
     </div>
 
     <section class="panel catalog-card" aria-labelledby="students-heading">

@@ -6,6 +6,7 @@ use App\Models\Programs;
 use App\Models\Students;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 use Tests\TestCase;
 
 class StudentsTest extends TestCase
@@ -30,7 +31,8 @@ class StudentsTest extends TestCase
 
         $this->get(route('admin.students.index'))
             ->assertOk()
-            ->assertSee('No students have been added yet.');
+            ->assertSee('No students have been added yet.')
+            ->assertSee('Export Excel');
 
         $this->post(route('admin.students.store'), [
             'first_name' => 'Ada',
@@ -103,6 +105,50 @@ class StudentsTest extends TestCase
             'last_name' => 'Byron',
             'program_id' => $program->id,
         ]);
+    }
+
+    public function test_admin_can_export_all_students_to_excel(): void
+    {
+        $this->actingAs(User::factory()->create(['is_admin' => true]));
+        $program = Programs::create(['name' => 'Computer Science']);
+        Students::create([
+            'first_name' => 'Ada',
+            'middle_name' => 'Augusta',
+            'last_name' => 'Byron',
+            'program_id' => $program->id,
+        ]);
+        Students::create([
+            'first_name' => 'Grace',
+            'last_name' => 'Hopper',
+            'program_id' => $program->id,
+        ]);
+
+        $response = $this->get(route('admin.students.export'))
+            ->assertOk()
+            ->assertHeader('content-type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+            ->assertHeader('content-disposition');
+
+        $path = tempnam(sys_get_temp_dir(), 'students-export-');
+        file_put_contents($path, $response->streamedContent());
+
+        try {
+            $worksheet = IOFactory::load($path)->getActiveSheet();
+
+            $this->assertSame(
+                ['Student ID', 'First Name', 'Middle Name', 'Last Name', 'Programme'],
+                $worksheet->rangeToArray('A1:E1')[0]
+            );
+            $this->assertSame(
+                ['Ada', 'Augusta', 'Byron', 'Computer Science'],
+                array_slice($worksheet->rangeToArray('A2:E2')[0], 1)
+            );
+            $this->assertSame(
+                ['Grace', null, 'Hopper', 'Computer Science'],
+                array_slice($worksheet->rangeToArray('A3:E3')[0], 1)
+            );
+        } finally {
+            unlink($path);
+        }
     }
 
     public function test_programme_with_assigned_students_cannot_be_deleted(): void
